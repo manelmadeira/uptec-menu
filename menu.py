@@ -28,12 +28,12 @@ def get_pdf(start, end, filename):
         end.year
     )
 
-    with open('./menus/' + filename + '.pdf', 'wb') as book:
+    with open('menus/' + filename + '.pdf', 'wb') as book:
         a = requests.get(url, stream=True)
 
         if (a.status_code != 200):
             try:
-                os.remove('./menus/' + filename + '.pdf')
+                os.remove('menus/' + filename + '.pdf')
             except OSError:
                 pass
             return False
@@ -50,7 +50,7 @@ def save_to_json(filename, obj):
 
     print('Saving info to JSON file...')
 
-    with open('./menus/' + filename + '.json', 'w') as fp:
+    with open('menus/' + filename + '.json', 'w') as fp:
         json.dump(obj, fp)
 
 
@@ -87,7 +87,7 @@ def pdf_to_text(filename):
 
     print('Converting pdf to txt...')
 
-    cmd = 'pdf2txt.py -A -c utf-8 -o ./menus/{fn}.txt ./menus/{fn}.pdf'.format(
+    cmd = 'pdf2txt.py -A -c utf-8 -o menus/{fn}.txt menus/{fn}.pdf'.format(
         fn=filename
     )
 
@@ -95,7 +95,7 @@ def pdf_to_text(filename):
     os.system(cmd)
 
     # parse text
-    with open('./menus/' + filename + '.txt', 'r') as menuFile:
+    with open('menus/' + filename + '.txt', 'r') as menuFile:
         content = menuFile.readlines()
 
         for line in content:
@@ -130,7 +130,7 @@ def get_new_file_name(start_end_date):
 
 
 def check_if_has_valid_pdf(filename):
-    file_path = './menus/' + filename + '.pdf'
+    file_path = 'menus/' + filename + '.pdf'
 
     # check if file exists
     if (os.path.isfile(file_path) is False):
