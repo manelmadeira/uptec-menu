@@ -87,7 +87,13 @@ def pdf_to_text(filename):
 
     print('Converting pdf to txt...')
 
-    cmd = 'pdf2txt.py -A -c utf-8 -o menus/{fn}.txt menus/{fn}.pdf'.format(
+    env_var = os.environ.get('UPTEC_ENV')
+
+    if (env_var is None):
+        env_var = ''
+
+    cmd = '{env}pdf2txt.py -A -c utf-8 -o menus/{fn}.txt menus/{fn}.pdf'.format(
+        env=env_var,
         fn=filename
     )
 
