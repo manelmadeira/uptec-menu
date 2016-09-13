@@ -136,13 +136,6 @@ def check_if_has_valid_pdf(filename):
     if (os.path.isfile(file_path) is False):
         return False
 
-    file_age = os.path.getmtime(file_path)
-    time_now = time.time()
-
-    # check if file age is bigger that 1h
-    if (time_now - file_age > 3600):
-        return False
-
     return True
 
 
