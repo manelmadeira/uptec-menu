@@ -3,7 +3,8 @@
 import requests
 import os
 import json
-import time
+import html2text
+import io
 
 menu_key = -1
 menu_day_key = 0
@@ -17,7 +18,17 @@ def get_pdf(start, end, filename):
     if not os.path.exists('menus'):
             os.makedirs('menus')
 
-    url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-Uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}.pdf""".format(
+    # "hack" for week 19-09-2016 to 23-09-2016
+    suffix = ''
+    week_monday = "{:02d}-{:02d}-{:04d}".format(
+        start.day,
+        start.month,
+        start.year
+    )
+    if (week_monday == '19-09-2016'):
+        suffix = '-1'
+
+    url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-Uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suff}.pdf""".format(
         start.year,
         start.month,
         start.day,
@@ -25,7 +36,8 @@ def get_pdf(start, end, filename):
         start.year,
         end.day,
         end.month,
-        end.year
+        end.year,
+        suff=suffix
     )
 
     with open('menus/' + filename + '.pdf', 'wb') as book:
@@ -46,6 +58,26 @@ def get_pdf(start, end, filename):
     return True
 
 
+def convert_pdf_to_html(filename):
+    print('Converting pdf to html...')
+
+    html_text = None
+
+    cmd = 'pdf2htmlEX --embed-css 0 --embed-image 0 --embed-javascript 0 --dest-dir menus menus/{fn}.pdf'.format(
+        fn=filename
+    )
+
+    # extract text
+    os.system(cmd)
+
+    h = html2text.HTML2Text()
+    with io.open('menus/' + filename + '.html', 'r', encoding='utf-8') as fp:
+        content = fp.read()
+        html_text = h.handle(content)
+
+    return html_text
+
+
 def save_to_json(filename, obj):
 
     print('Saving info to JSON file...')
@@ -61,14 +93,14 @@ def pdf_line(line):
         return None
 
     exclude_words = [
-        'CARNE',
-        'PEIXE',
-        'VEGETARIANO',
-        'SEGUNDA',
-        'TERÇA',
-        'QUARTA',
-        'QUINTA',
-        'SEXTA'
+        u'CARNE',
+        u'PEIXE',
+        u'VEGETARIANO',
+        u'SEGUNDA',
+        u'TERÇA',
+        u'QUARTA',
+        u'QUINTA',
+        u'SEXTA'
     ]
 
     if (line in exclude_words):
@@ -82,36 +114,18 @@ def pdf_line(line):
         menu_day_key += 1
 
 
-def pdf_to_text(filename):
+def html_to_text(filename, html_text):
     global menu_key, menu_day_key, menu
 
-    print('Converting pdf to txt...')
-
-    env_var = os.environ.get('UPTEC_ENV')
-
-    if (env_var is None):
-        env_var = ''
-
-    cmd = '{env}pdf2txt.py -A -c utf-8 -o menus/{fn}.txt menus/{fn}.pdf'.format(
-        env=env_var,
-        fn=filename
-    )
-
-    # extract text
-    os.system(cmd)
-
-    # parse text
-    with open('menus/' + filename + '.txt', 'r') as menuFile:
-        content = menuFile.readlines()
-
-        for line in content:
-            if (line.strip() == 'NOTA'):
-                break
-            if (line.strip() == 'CARNE'):
-                menu_key += 1
-                menu_day_key = 0
-            else:
-                pdf_line(line.strip())
+    content = html_text.split('\n')
+    for line in content:
+        if (line.strip() == 'NOTA'):
+            break
+        if (line.strip() == 'CARNE'):
+            menu_key += 1
+            menu_day_key = 0
+        else:
+            pdf_line(line.strip())
 
     save_to_json(filename, menu)
 
@@ -164,10 +178,16 @@ def get_menu(start_end_date):
         # get PDF from UPTEC website
         has_pdf = get_pdf(start_end_date[0], start_end_date[1], filename)
 
-    if not has_pdf:
-        return False
+        if not has_pdf:
+            return False
 
-    # extact text from PDF
-    menu_json = pdf_to_text(filename)
+        # convert pdf to html
+        html_text = convert_pdf_to_html(filename)
+
+        if html_text is None:
+            return False
+
+    # get info from html
+    menu_json = html_to_text(filename, html_text)
 
     return menu_json
