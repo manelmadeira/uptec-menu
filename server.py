@@ -83,7 +83,7 @@ def print_to_slack(start_end_date, menu, param=None):
 
 # pretty print Slack error message
 def print_error_to_slack(reason=None):
-    return_txt = 'Não foi possível obter a ementa! Por favor tente mais tarde.'
+    return_txt = 'Não foi possível obter a ementa! Por favor tente mais tarde.\nMais informações em: http://assicanti.pt/home/cafetarias/uptec/'
 
     if (reason == 'params'):
         return_txt = 'Parâmetro inválido!'
