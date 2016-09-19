@@ -61,14 +61,16 @@ def get_pdf(start, end, filename):
 def convert_pdf_to_html(filename):
     print('Converting pdf to html...')
 
-    html_text = None
-
     cmd = 'pdf2htmlEX --embed-css 0 --embed-image 0 --embed-javascript 0 --dest-dir menus menus/{fn}.pdf'.format(
         fn=filename
     )
 
     # extract text
     os.system(cmd)
+
+
+def get_html(filename):
+    html_text = None
 
     h = html2text.HTML2Text()
     with io.open('menus/' + filename + '.html', 'r', encoding='utf-8') as fp:
@@ -182,10 +184,13 @@ def get_menu(start_end_date):
             return False
 
         # convert pdf to html
-        html_text = convert_pdf_to_html(filename)
+        convert_pdf_to_html(filename)
 
-        if html_text is None:
-            return False
+    # get html from file
+    html_text = get_html(filename)
+
+    if html_text is None:
+        return False
 
     # get info from html
     menu_json = html_to_text(filename, html_text)
