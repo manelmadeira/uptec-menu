@@ -70,6 +70,7 @@ def convert_pdf_to_html(filename):
         )
 
     # extract text
+    print('Running: ' + cmd)
     os.system(cmd)
 
 
