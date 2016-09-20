@@ -63,7 +63,7 @@ def convert_pdf_to_html(filename):
 
     env = os.environ.get('UPTEC_MENU')
     if (env == 'prod'):
-        cmd = 'docker run -ti --rm -v ~/uptec-menu/pdf:/pdf bwits/pdf2htmlex pdf2htmlEX ' + fn + '.pdf'
+        cmd = 'docker run -ti --rm -v ~/uptec-menu/pdf:/pdf bwits/pdf2htmlex pdf2htmlEX ' + filename + '.pdf'
     else:
         cmd = 'pdf2htmlEX --embed-css 0 --embed-image 0 --embed-javascript 0 --dest-dir pdf pdf/{fn}.pdf'.format(
             fn=filename
