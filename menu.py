@@ -15,8 +15,8 @@ def get_pdf(start, end, filename):
 
     print('Getting pdf...')
 
-    if not os.path.exists('menus'):
-            os.makedirs('menus')
+    if not os.path.exists('pdf'):
+            os.makedirs('pdf')
 
     # "hack" for week 19-09-2016 to 23-09-2016
     suffix = ''
@@ -40,12 +40,12 @@ def get_pdf(start, end, filename):
         suff=suffix
     )
 
-    with open('menus/' + filename + '.pdf', 'wb') as book:
+    with open('pdf/' + filename + '.pdf', 'wb') as book:
         a = requests.get(url, stream=True)
 
         if (a.status_code != 200):
             try:
-                os.remove('menus/' + filename + '.pdf')
+                os.remove('pdf/' + filename + '.pdf')
             except OSError:
                 pass
             return False
@@ -61,9 +61,13 @@ def get_pdf(start, end, filename):
 def convert_pdf_to_html(filename):
     print('Converting pdf to html...')
 
-    cmd = 'pdf2htmlEX --embed-css 0 --embed-image 0 --embed-javascript 0 --dest-dir menus menus/{fn}.pdf'.format(
-        fn=filename
-    )
+    env = os.environ.get('UPTEC_MENU')
+    if (env == 'prod'):
+        cmd = 'docker run -ti --rm -v ~/uptec-menu/pdf:/pdf bwits/pdf2htmlex pdf2htmlEX ' + fn + '.pdf'
+    else:
+        cmd = 'pdf2htmlEX --embed-css 0 --embed-image 0 --embed-javascript 0 --dest-dir pdf pdf/{fn}.pdf'.format(
+            fn=filename
+        )
 
     # extract text
     os.system(cmd)
@@ -73,7 +77,7 @@ def get_html(filename):
     html_text = None
 
     h = html2text.HTML2Text()
-    with io.open('menus/' + filename + '.html', 'r', encoding='utf-8') as fp:
+    with io.open('pdf/' + filename + '.html', 'r', encoding='utf-8') as fp:
         content = fp.read()
         html_text = h.handle(content)
 
@@ -84,7 +88,7 @@ def save_to_json(filename, obj):
 
     print('Saving info to JSON file...')
 
-    with open('menus/' + filename + '.json', 'w') as fp:
+    with open('pdf/' + filename + '.json', 'w') as fp:
         json.dump(obj, fp)
 
 
@@ -152,7 +156,7 @@ def get_new_file_name(start_end_date):
 
 
 def check_if_has_valid_pdf(filename):
-    file_path = 'menus/' + filename + '.pdf'
+    file_path = 'pdf/' + filename + '.pdf'
 
     # check if file exists
     if (os.path.isfile(file_path) is False):
