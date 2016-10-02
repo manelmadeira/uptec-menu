@@ -5,6 +5,7 @@ import os
 import json
 import html2text
 import io
+import subprocess
 
 menu_key = -1
 menu_day_key = 0
@@ -71,7 +72,8 @@ def convert_pdf_to_html(filename):
 
     # extract text
     print('Running: ' + cmd)
-    os.system(cmd)
+    # os.system(cmd)
+    subprocess.call(cmd, shell=True)
 
 
 def get_html(filename):
