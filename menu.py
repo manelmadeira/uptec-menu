@@ -84,8 +84,6 @@ def get_html(filename):
         content = fp.read()
         html_text = h.handle(content)
 
-    print(html_text)
-
     return html_text
 
 
