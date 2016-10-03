@@ -84,6 +84,8 @@ def get_html(filename):
         content = fp.read()
         html_text = h.handle(content)
 
+    print(html_text)
+
     return html_text
 
 
@@ -130,6 +132,11 @@ def html_to_text(filename, html_text):
     for line in content:
         if (line.strip() == 'NOTA'):
             break
+
+        if ('CARNE ' in line.strip()):
+            menu_key += 1
+            menu_day_key = 0
+
         if (line.strip() == 'CARNE'):
             menu_key += 1
             menu_day_key = 0
