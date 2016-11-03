@@ -6,6 +6,7 @@ import json
 import html2text
 import io
 import subprocess
+import datetime
 
 menu_key = -1
 menu_day_key = 0
@@ -168,6 +169,13 @@ def check_if_has_valid_pdf(filename):
 
     # check if file exists
     if (os.path.isfile(file_path) is False):
+        return False
+
+    # check if file is older than 1 day
+    today = datetime.datetime.today()
+    modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+    duration = today - modified_date
+    if (duration.days > 1):
         return False
 
     return True
