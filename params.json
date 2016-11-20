@@ -1,6 +1,6 @@
 {
-  "name": "UPTEC Menu",
-  "tagline": "UPTEC Menu API",
+  "name": "UPTEC Lunch",
+  "tagline": "UPTEC lunch API",
   "body": "# UPTEC Menu\r\n\r\nIt's a simple API, built in Flask, to get the UPTEC cafeteria menu for the week and return it ready for a Slack command.\r\n\r\n# Requirements\r\n\r\n[pdf2htmlEX] (https://github.com/coolwanglu/pdf2htmlEX/wiki) - To convert PDF to HTML\r\n\r\n# Installation\r\n\r\n`pip install -r requirements.txt`\r\n\r\nTo run\r\n\r\n`python server.py`\r\n\r\n# HTTP GET Filters\r\n\r\n`text=today`, will give the today's menu instead of the week menu\r\n\r\n# Next features\r\n\r\nI'm developing some filters...\r\n",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
