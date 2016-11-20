@@ -2,6 +2,8 @@
 
 It's a simple API, built in Flask, to get the UPTEC cafeteria menu for the week and return it ready for a Slack command.
 
+You can add it to your Slack Team, [click here](https://www.manuelmadeira.com/oauth-uptec/).
+
 # Requirements
 
 [pdf2htmlEX] (https://github.com/coolwanglu/pdf2htmlEX/wiki) - To convert PDF to HTML
