@@ -103,11 +103,14 @@ def check_if_weekend():
     return weekday == 5 or weekday == 6
 
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def default():
 
     # get request params
-    param = request.args.get("text")
+    if request.method == 'GET':
+        param = request.args.get("text")
+    else:
+        param = request.form.get("text")
 
     if (param is not None and len(param.strip()) == 0):
         param = None
