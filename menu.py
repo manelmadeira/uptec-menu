@@ -27,19 +27,15 @@ def get_pdf(start, end, filename):
         start.month,
         start.year
     )
-    if (week_monday == '21-11-2016'):
-        suffix = '-1'
 
-    url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-Uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suff}.pdf""".format(
+    url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/EMENTA-PCTA-{:02d}-{:02d}-A-{:02d}-{:02d}-{:04d}.pdf""".format(
         start.year,
         start.month,
         start.day,
         start.month,
-        start.year,
         end.day,
         end.month,
         end.year,
-        suff=suffix
     )
 
     with open('pdf/' + filename + '.pdf', 'wb') as book:
@@ -103,6 +99,7 @@ def pdf_line(line):
         return None
 
     exclude_words = [
+        u'SOPA',
         u'CARNE',
         u'PEIXE',
         u'VEGETARIANO',
@@ -115,6 +112,9 @@ def pdf_line(line):
 
     if (line in exclude_words):
         return None
+
+    if (menu_day_key == 0):
+        line = 'Sopa de ' + line
 
     # check if ()
     if (line[0] == '('):
@@ -129,14 +129,15 @@ def html_to_text(filename, html_text):
 
     content = html_text.split('\n')
     for line in content:
-        if (line.strip() == 'NOTA'):
+        # exclude last line
+        if ('![](pdf2htmlEX' in line.strip()):
             break
 
-        if ('CARNE ' in line.strip()):
+        if ('SOPA ' in line.strip()):
             menu_key += 1
             menu_day_key = 0
 
-        if (line.strip() == 'CARNE'):
+        if (line.strip() == 'SOPA'):
             menu_key += 1
             menu_day_key = 0
         else:
