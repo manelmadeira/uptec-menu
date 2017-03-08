@@ -28,15 +28,23 @@ def get_pdf(start, end, filename):
         start.year
     )
 
-    url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/EMENTA-PCTA-{:02d}-{:02d}-A-{:02d}-{:02d}-{:04d}.pdf""".format(
+    suffix = ''
+    if (week_monday == '06-03-2017'):
+        suffix = '1'
+
+    url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suffix}.pdf""".format(
         start.year,
         start.month,
         start.day,
         start.month,
+        start.year,
         end.day,
         end.month,
         end.year,
+        suffix=suffix
     )
+
+    print url
 
     with open('pdf/' + filename + '.pdf', 'wb') as book:
         a = requests.get(url, stream=True)
