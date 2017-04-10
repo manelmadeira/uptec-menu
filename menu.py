@@ -20,17 +20,15 @@ def get_pdf(start, end, filename):
     if not os.path.exists('pdf'):
             os.makedirs('pdf')
 
-    # "hack" for week 19-09-2016 to 23-09-2016
     suffix = ''
-    week_monday = "{:02d}-{:02d}-{:04d}".format(
-        start.day,
-        start.month,
-        start.year
+    week_friday = "{:02d}-{:02d}-{:04d}".format(
+        end.day,
+        end.month,
+        end.year
     )
 
-    suffix = ''
-    if (week_monday == '06-03-2017'):
-        suffix = '1'
+    if (week_friday == '14-04-2017'):
+        end = end - datetime.timedelta(days=1)
 
     url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suffix}.pdf""".format(
         start.year,
