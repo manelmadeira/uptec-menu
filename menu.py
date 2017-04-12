@@ -113,14 +113,20 @@ def pdf_line(line):
         u'TERÇA',
         u'QUARTA',
         u'QUINTA',
-        u'SEXTA'
+        u'SEXTA',
+        u'NOTA',
+        u'SE FOR ALÉRGICO A ALGUMA SUBSTÂNCIA, INFORME OS',
+        u'NOSSOS COLABORADORES.'
     ]
 
-    if (line in exclude_words):
-        return None
+    if (u'FERIADO' in line):
+        line = 'FERIADO'
+    else:
+        if (line in exclude_words):
+            return None
 
-    if (menu_day_key == 0):
-        line = 'Sopa de ' + line
+        if (menu_day_key == 0):
+            line = 'Sopa de ' + line
 
     # check if ()
     if (line[0] == '('):
