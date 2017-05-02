@@ -21,14 +21,14 @@ def get_pdf(start, end, filename):
             os.makedirs('pdf')
 
     suffix = ''
-    week_friday = "{:02d}-{:02d}-{:04d}".format(
-        end.day,
-        end.month,
-        end.year
+    week_monday = "{:02d}-{:02d}-{:04d}".format(
+        start.day,
+        start.month,
+        start.year
     )
 
-    if (week_friday == '14-04-2017'):
-        end = end - datetime.timedelta(days=1)
+    if (week_monday == '01-05-2017'):
+        start = start + datetime.timedelta(days=1)
 
     url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suffix}.pdf""".format(
         start.year,
