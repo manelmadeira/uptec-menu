@@ -27,8 +27,8 @@ def get_pdf(start, end, filename):
         start.year
     )
 
-    if (week_monday == '01-05-2017'):
-        start = start + datetime.timedelta(days=1)
+    if (week_monday == '09-10-2017'):
+        suffix = '.asd_'
 
     url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suffix}.pdf""".format(
         start.year,
