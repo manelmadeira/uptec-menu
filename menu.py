@@ -27,8 +27,9 @@ def get_pdf(start, end, filename):
         start.year
     )
 
-    if (week_monday == '09-10-2017'):
-        suffix = '.asd_'
+    if (week_monday == '27-11-2017'):
+        suffix = ''
+        end = end - datetime.timedelta(days=1)
 
     url = """http://assicanti.pt/wp-content/uploads/{:04d}/{:02d}/Ementa-uptec-{:02d}-{:02d}-{:04d}-a-{:02d}-{:02d}-{:04d}{suffix}.pdf""".format(
         start.year,
@@ -116,7 +117,11 @@ def pdf_line(line):
         u'SEXTA',
         u'NOTA',
         u'SE FOR ALÉRGICO A ALGUMA SUBSTÂNCIA, INFORME OS',
-        u'NOSSOS COLABORADORES.'
+        u'NOSSOS COLABORADORES.',
+        u'Glúten Crustáceos Ovos  Pescado Amendoins Soja  Lácteos Frutos casca Aipo',
+        u'Mostarda Sementes Dióxido Moluscos Tremoços',
+        u'Rija  sésamo enxofre e',
+        u'sulfitos'
     ]
 
     if (u'FERIADO' in line):
